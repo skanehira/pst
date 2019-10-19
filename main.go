@@ -33,11 +33,20 @@ func parseProcesses(processes []ps.Process) map[int]Process {
 	return pids
 }
 
-func run() int {
-	// get processes
+func getProcesses() ([]ps.Process, error) {
 	processes, err := ps.Processes()
 	if err != nil {
 		log.Println("cannot get processes: " + err.Error())
+		return nil, err
+	}
+
+	return processes, nil
+}
+
+func run() int {
+	// get processes
+	processes, err := getProcesses()
+	if err != nil {
 		return 1
 	}
 
