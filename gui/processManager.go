@@ -1,8 +1,11 @@
 package gui
 
 import (
+	"bytes"
 	"log"
 	"os"
+	"os/exec"
+	"runtime"
 	"sort"
 	"strconv"
 	"strings"
@@ -33,6 +36,10 @@ func (p *ProcessManager) GetProcesses() error {
 
 	pids := make(map[int]Process)
 	for _, proc := range processes {
+		// skip pid 0
+		if proc.Pid() == 0 {
+			continue
+		}
 		if strings.Index(proc.Executable(), p.FilterWord) == -1 {
 			continue
 		}
@@ -111,6 +118,9 @@ func (p *ProcessManager) Selected() *Process {
 		return nil
 	}
 	row, _ := p.GetSelection()
+	if row < 0 {
+		return nil
+	}
 	return &p.processes[row-1]
 }
 
@@ -127,4 +137,25 @@ func (p *ProcessManager) Kill() error {
 		return err
 	}
 	return nil
+}
+
+func (p *ProcessManager) Info() (string, error) {
+	// TODO implements windows
+	if runtime.GOOS == "windows" {
+		return "", nil
+	}
+
+	proc := p.Selected()
+	if proc == nil {
+		return "", nil
+	}
+	buf := bytes.Buffer{}
+	cmd := exec.Command("ps", "-o", "pid,ppid,%cpu,%mem,lstart,user,command", "-p", strconv.Itoa(proc.Pid))
+	cmd.Stdout = &buf
+	cmd.Stderr = &buf
+	if err := cmd.Run(); err != nil {
+		return "", err
+	}
+
+	return buf.String(), nil
 }

@@ -28,6 +28,13 @@ func (g *Gui) ProcessManagerKeybinds() {
 
 		return event
 	})
+
+	g.ProcessManager.SetSelectionChangedFunc(func(row, col int) {
+		if row < 1 {
+			return
+		}
+		g.ProcInfoView.UpdateInfo(g)
+	})
 }
 
 func (g *Gui) FilterInputKeybinds() {

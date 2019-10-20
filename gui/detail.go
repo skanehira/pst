@@ -1,6 +1,11 @@
 package gui
 
-import "github.com/rivo/tview"
+import (
+	"fmt"
+	"strings"
+
+	"github.com/rivo/tview"
+)
 
 type ProcInfoView struct {
 	*tview.TextView
@@ -10,11 +15,21 @@ func NewProcInfoView() *ProcInfoView {
 	p := &ProcInfoView{
 		TextView: tview.NewTextView().SetTextAlign(tview.AlignLeft).SetDynamicColors(true),
 	}
-	p.SetBorder(true)
+	p.SetTitleAlign(tview.AlignLeft).SetTitle("process info").SetBorder(true)
 	return p
 }
 
-func (p *ProcInfoView) UpdateInfo(g *Gui, text string) {
+func (p *ProcInfoView) UpdateInfo(g *Gui) {
+	text := ""
+	info, err := g.ProcessManager.Info()
+	if err != nil {
+		text = err.Error()
+	} else {
+		rows := strings.Split(info, "\n")
+		header := fmt.Sprintf("[yellow]%s[white]\n", rows[0])
+		text = header + rows[1]
+	}
+
 	g.App.QueueUpdateDraw(func() {
 		p.SetText(text)
 	})
