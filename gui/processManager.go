@@ -79,10 +79,6 @@ func (p *ProcessManager) UpdateView() error {
 		return err
 	}
 
-	if len(p.processes) == 0 {
-		return nil
-	}
-
 	table := p.Clear()
 
 	// set headers
