@@ -9,6 +9,10 @@ $ git clone https://github.com/skanehira/pst
 $ go install
 ```
 
+## Support OS
+- Mac
+- Linux
+
 ## Usage
 ```sh
 $ pst -h
