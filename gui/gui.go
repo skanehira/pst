@@ -76,6 +76,10 @@ func (g *Gui) Run() error {
 	if err := g.ProcessManager.UpdateView(); err != nil {
 		return err
 	}
+	// when start app, set select index 0
+	g.ProcessManager.Select(1, 0)
+
+	g.ProcInfoView.UpdateInfo(g)
 
 	grid := tview.NewGrid().SetRows(1, 0).
 		SetColumns(30, 0).
