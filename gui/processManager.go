@@ -2,6 +2,7 @@ package gui
 
 import (
 	"log"
+	"os"
 	"strconv"
 	"strings"
 
@@ -110,4 +111,19 @@ func (p *ProcessManager) Selected() *Process {
 	}
 	row, _ := p.GetSelection()
 	return &p.processes[row-1]
+}
+
+func (p *ProcessManager) Kill() error {
+	pid := p.Selected().Pid
+	proc, err := os.FindProcess(pid)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	if err := proc.Kill(); err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
 }
