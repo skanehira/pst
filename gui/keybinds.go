@@ -16,10 +16,12 @@ func (g *Gui) ProcessManagerKeybinds() {
 
 		switch event.Rune() {
 		case 'K':
-			g.Confirm("Do you want to kill this process?", "kill", g.ProcessManager, func() {
-				g.ProcessManager.Kill()
-				g.ProcessManager.UpdateView()
-			})
+			if g.ProcessManager.Selected() != nil {
+				g.Confirm("Do you want to kill this process?", "kill", g.ProcessManager, func() {
+					g.ProcessManager.Kill()
+					g.ProcessManager.UpdateView()
+				})
+			}
 		}
 
 		return event
