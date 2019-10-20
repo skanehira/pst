@@ -11,7 +11,9 @@ func (g *Gui) ProcessManagerKeybinds() {
 	}).SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
 		case tcell.KeyTab:
-			g.App.SetFocus(g.FilterInput)
+			g.SwitchPanel(g.FilterInput)
+		case tcell.KeyF1:
+			g.Help("process", g.ProcessManager)
 		}
 
 		switch event.Rune() {
