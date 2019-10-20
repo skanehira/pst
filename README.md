@@ -1,5 +1,5 @@
 # pst
-This is process manager written in Go.
+This is TUI process monitor written in Go.
 
 ![](https://i.imgur.com/TUcGDfk.gif)
 
