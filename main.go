@@ -32,6 +32,7 @@ func run() int {
 		}
 
 		log.SetOutput(logWriter)
+		log.SetFlags(log.Lshortfile)
 	}
 
 	if err := gui.New().Run(); err != nil {
