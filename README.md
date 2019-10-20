@@ -18,3 +18,36 @@ Usage of pst:
 
 # run tui
 $ pst
+```
+
+Default, log file will generate `$HOME/pst.log` if it's not exist.
+
+## Keybindings
+### input
+| key         | description          |
+|-------------|----------------------|
+| Enter       | next process         |
+| Tab         | focus next panel     |
+| Shift + Tab | focus previous panel |
+
+### processes panel
+| key         | description          |
+|-------------|----------------------|
+| j           | next process         |
+| k           | previous process     |
+| g           | first process        |
+| G           | last process         |
+| K           | kill select process  |
+| Tab         | focus next panel     |
+| Shift + Tab | focus previous panel |
+
+### process tree panel
+| key         | description          |
+|-------------|----------------------|
+| j           | next process         |
+| k           | previous process     |
+| g           | first process        |
+| G           | last process         |
+| Enter       | expand child process |
+| Tab         | focus next  panel    |
+| Shift + Tab | focus previous panel |
