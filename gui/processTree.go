@@ -66,7 +66,7 @@ func (p *ProcessTreeView) addNode(g *Gui, target *tview.TreeNode, pid int) {
 	}
 
 	for _, p := range proc.Child {
-		node := tview.NewTreeNode(fmt.Sprintf("PID: %d PPID: %d CMD: %s", p.Pid, p.PPid, p.Cmd)).
+		node := tview.NewTreeNode(fmt.Sprintf("PID: %d CMD: %s", p.Pid, p.Cmd)).
 			SetReference(p.Pid)
 
 		p, ok := processes[p.Pid]
