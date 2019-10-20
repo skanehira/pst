@@ -145,6 +145,20 @@ func (p *ProcessManager) Kill() error {
 	return nil
 }
 
+func (p *ProcessManager) KillWithPid(pid int) error {
+	proc, err := os.FindProcess(pid)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	if err := proc.Kill(); err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
 func (p *ProcessManager) Info(pid int) (string, error) {
 	// TODO implements windows
 	if runtime.GOOS == "windows" {

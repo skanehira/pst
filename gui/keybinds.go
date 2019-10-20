@@ -99,6 +99,19 @@ func (g *Gui) ProcessTreeViewKeybinds() {
 	g.ProcessTreeView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
 		}
+		switch event.Rune() {
+		case 'K':
+			if node := g.ProcessTreeView.GetCurrentNode(); node != nil {
+				if ref := node.GetReference(); ref != nil {
+					g.Confirm("Do you want to kill this process?", "kill", g.ProcessTreeView, func() {
+						g.ProcessManager.KillWithPid(ref.(int))
+						// wait a little to finish process killing
+						time.Sleep(1 * time.Millisecond)
+						g.ProcessTreeView.UpdateTree(g)
+					})
+				}
+			}
+		}
 		g.GrobalKeybind(event)
 		return event
 	})
