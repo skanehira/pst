@@ -14,16 +14,37 @@ type Gui struct {
 	ProcessTreeView *ProcessTreeView
 	App             *tview.Application
 	Pages           *tview.Pages
+	Panels
+}
+
+type Panels struct {
+	Current int
+	Panels  []tview.Primitive
 }
 
 func New() *Gui {
-	return &Gui{
-		FilterInput:     tview.NewInputField().SetLabel("cmd name:"),
-		ProcessManager:  NewProcessManager(),
+	filterInput := tview.NewInputField().SetLabel("cmd name:")
+	processManager := NewProcessManager()
+	procInfoView := NewProcInfoView()
+	processTreeView := NewProcessTreeView()
+
+	g := &Gui{
+		FilterInput:     filterInput,
+		ProcessManager:  processManager,
 		App:             tview.NewApplication(),
-		ProcInfoView:    NewProcInfoView(),
-		ProcessTreeView: NewProcessTreeView(),
+		ProcInfoView:    procInfoView,
+		ProcessTreeView: processTreeView,
 	}
+
+	g.Panels = Panels{
+		Panels: []tview.Primitive{
+			filterInput,
+			processManager,
+			processTreeView,
+		},
+	}
+
+	return g
 }
 
 func (g *Gui) Confirm(message, doneLabel string, primitive tview.Primitive, doneFunc func()) {

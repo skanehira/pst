@@ -4,6 +4,25 @@ import (
 	"github.com/gdamore/tcell"
 )
 
+func (g *Gui) GrobalKeybind(event *tcell.EventKey) {
+	switch event.Key() {
+	case tcell.KeyTab:
+		idx := (g.Panels.Current + 1) % len(g.Panels.Panels)
+		g.Panels.Current = idx
+		g.SwitchPanel(g.Panels.Panels[idx])
+	case tcell.KeyBacktab:
+		g.Panels.Current--
+
+		if g.Panels.Current < 0 {
+			g.Current = len(g.Panels.Panels) - 1
+		}
+
+		idx := (g.Panels.Current) % len(g.Panels.Panels)
+		g.Panels.Current = idx
+		g.SwitchPanel(g.Panels.Panels[idx])
+	}
+}
+
 func (g *Gui) ProcessManagerKeybinds() {
 	g.ProcessManager.SetDoneFunc(func(key tcell.Key) {
 		switch key {
@@ -12,8 +31,6 @@ func (g *Gui) ProcessManagerKeybinds() {
 		}
 	}).SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
-		case tcell.KeyTab:
-			g.SwitchPanel(g.FilterInput)
 		case tcell.KeyF1:
 			g.Help("process", g.ProcessManager)
 		}
@@ -28,6 +45,7 @@ func (g *Gui) ProcessManagerKeybinds() {
 			}
 		}
 
+		g.GrobalKeybind(event)
 		return event
 	})
 
@@ -53,10 +71,10 @@ func (g *Gui) FilterInputKeybinds() {
 	}).SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
 		case tcell.KeyTab:
-			g.SwitchPanel(g.ProcessManager)
 			g.ProcInfoView.UpdateInfo(g)
 			g.ProcessTreeView.UpdateTree(g)
 		}
+		g.GrobalKeybind(event)
 		return event
 	})
 
