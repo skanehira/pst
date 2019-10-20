@@ -10,6 +10,7 @@ import (
 type Gui struct {
 	FilterInput    *tview.InputField
 	ProcessManager *ProcessManager
+	ProcInfoView   *ProcInfoView
 	App            *tview.Application
 	Pages          *tview.Pages
 }
@@ -19,6 +20,7 @@ func New() *Gui {
 		FilterInput:    tview.NewInputField(),
 		ProcessManager: NewProcessManager(),
 		App:            tview.NewApplication(),
+		ProcInfoView:   NewProcInfoView(),
 	}
 }
 
@@ -75,9 +77,11 @@ func (g *Gui) Run() error {
 		return err
 	}
 
-	grid := tview.NewGrid().SetRows(1).
+	grid := tview.NewGrid().SetRows(1, 0).
+		SetColumns(30, 0).
 		AddItem(g.FilterInput, 0, 0, 1, 1, 0, 0, true).
-		AddItem(g.ProcessManager, 1, 0, 2, 1, 0, 0, true)
+		AddItem(g.ProcessManager, 1, 0, 1, 1, 0, 0, true).
+		AddItem(g.ProcInfoView, 1, 1, 1, 1, 0, 0, true)
 
 	g.Pages = tview.NewPages().
 		AddAndSwitchToPage("main", grid, true)
