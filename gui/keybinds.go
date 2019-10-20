@@ -2,6 +2,7 @@ package gui
 
 import (
 	"github.com/gdamore/tcell"
+	"github.com/rivo/tview"
 )
 
 func (g *Gui) GrobalKeybind(event *tcell.EventKey) {
@@ -85,7 +86,30 @@ func (g *Gui) FilterInputKeybinds() {
 	})
 }
 
+func (g *Gui) ProcessTreeViewKeybinds() {
+	g.ProcessTreeView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		switch event.Key() {
+		}
+		g.GrobalKeybind(event)
+		return event
+	})
+
+	g.ProcessTreeView.SetChangedFunc(func(node *tview.TreeNode) {
+		if node == nil {
+			return
+		}
+		ref := node.GetReference()
+		if ref == nil {
+			return
+		}
+
+		pid := ref.(int)
+		g.ProcInfoView.UpdateInfoWithPid(g, pid)
+	})
+}
+
 func (g *Gui) SetKeybinds() {
 	g.FilterInputKeybinds()
 	g.ProcessManagerKeybinds()
+	g.ProcessTreeViewKeybinds()
 }

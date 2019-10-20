@@ -52,13 +52,6 @@ func (p *ProcessTreeView) UpdateTree(g *Gui) {
 			node.SetExpanded(!node.IsExpanded())
 		}
 	})
-
-	p.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		switch event.Key() {
-		}
-		g.GrobalKeybind(event)
-		return event
-	})
 }
 
 func (p *ProcessTreeView) addNode(g *Gui, target *tview.TreeNode, pid int) {

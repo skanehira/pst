@@ -144,18 +144,18 @@ func (p *ProcessManager) Kill() error {
 	return nil
 }
 
-func (p *ProcessManager) Info() (string, error) {
+func (p *ProcessManager) Info(pid int) (string, error) {
 	// TODO implements windows
 	if runtime.GOOS == "windows" {
 		return "", nil
 	}
 
-	proc := p.Selected()
-	if proc == nil {
+	if pid == 0 {
 		return "", nil
 	}
+
 	buf := bytes.Buffer{}
-	cmd := exec.Command("ps", "-o", "pid,ppid,%cpu,%mem,lstart,user,command", "-p", strconv.Itoa(proc.Pid))
+	cmd := exec.Command("ps", "-o", "pid,ppid,%cpu,%mem,lstart,user,command", "-p", strconv.Itoa(pid))
 	cmd.Stdout = &buf
 	cmd.Stderr = &buf
 	if err := cmd.Run(); err != nil {
