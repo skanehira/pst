@@ -9,17 +9,18 @@ func (g *Gui) GrobalKeybind(event *tcell.EventKey) {
 	case tcell.KeyTab:
 		idx := (g.Panels.Current + 1) % len(g.Panels.Panels)
 		g.Panels.Current = idx
-		g.SwitchPanel(g.Panels.Panels[idx])
+		g.SwitchPanel(g.Panels.Panels[g.Panels.Current])
 	case tcell.KeyBacktab:
 		g.Panels.Current--
 
 		if g.Panels.Current < 0 {
 			g.Current = len(g.Panels.Panels) - 1
+		} else {
+			idx := (g.Panels.Current) % len(g.Panels.Panels)
+			g.Panels.Current = idx
 		}
 
-		idx := (g.Panels.Current) % len(g.Panels.Panels)
-		g.Panels.Current = idx
-		g.SwitchPanel(g.Panels.Panels[idx])
+		g.SwitchPanel(g.Panels.Panels[g.Panels.Current])
 	}
 }
 

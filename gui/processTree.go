@@ -55,9 +55,8 @@ func (p *ProcessTreeView) UpdateTree(g *Gui) {
 
 	p.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
-		case tcell.KeyTab:
-			g.SwitchPanel(g.FilterInput)
 		}
+		g.GrobalKeybind(event)
 		return event
 	})
 }
