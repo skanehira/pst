@@ -27,6 +27,11 @@ $ pst
 Default, log file will generate `$HOME/pst.log` if it's not exist.
 
 ## Keybindings
+### common keybinds
+| key      | description |
+|----------|-------------|
+| Ctrl + c | stop pst    |
+
 ### input
 | key         | description          |
 |-------------|----------------------|
