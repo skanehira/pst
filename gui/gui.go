@@ -26,7 +26,7 @@ func New() *Gui {
 	filterInput := tview.NewInputField().SetLabel("cmd name:")
 	processManager := NewProcessManager()
 	procInfoView := NewProcInfoView()
-	processTreeView := NewProcessTreeView()
+	processTreeView := NewProcessTreeView(processManager)
 
 	g := &Gui{
 		FilterInput:     filterInput,
