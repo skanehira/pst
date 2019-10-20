@@ -21,12 +21,12 @@ func New() *Gui {
 	}
 }
 
-func (g *Gui) Confirm(message, doneLabel string, panel tview.Primitive, doneFunc func()) {
+func (g *Gui) Confirm(message, doneLabel string, primitive tview.Primitive, doneFunc func()) {
 	modal := tview.NewModal().
 		SetText(message).
 		AddButtons([]string{doneLabel, "Cancel"}).
 		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
-			g.CloseAndSwitchPanel("modal", panel)
+			g.CloseAndSwitchPanel("modal", primitive)
 			if buttonLabel == doneLabel {
 				doneFunc()
 			}
@@ -35,9 +35,9 @@ func (g *Gui) Confirm(message, doneLabel string, panel tview.Primitive, doneFunc
 	g.Pages.AddAndSwitchToPage("modal", g.Modal(modal, 50, 29), true).ShowPage("main")
 }
 
-func (g *Gui) CloseAndSwitchPanel(removePanel string, panel tview.Primitive) {
-	g.Pages.RemovePage(removePanel).ShowPage("main")
-	g.SwitchPanel(panel)
+func (g *Gui) CloseAndSwitchPanel(removePrimitive string, primitive tview.Primitive) {
+	g.Pages.RemovePage(removePrimitive).ShowPage("main")
+	g.SwitchPanel(primitive)
 }
 
 func (g *Gui) Modal(p tview.Primitive, width, height int) tview.Primitive {
