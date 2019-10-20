@@ -11,6 +11,7 @@ type Gui struct {
 	FilterInput    *tview.InputField
 	ProcessManager *ProcessManager
 	App            *tview.Application
+	pages          *tview.Pages
 }
 
 func New() *Gui {
@@ -55,6 +56,14 @@ func (g *Gui) ProcessManagerKeybinds() {
 			g.App.SetFocus(g.FilterInput)
 		}
 
+		switch event.Rune() {
+		case 'K':
+			g.confirm("Do you want to kill this process?", "kill", g.ProcessManager, func() {
+				g.ProcessManager.Kill()
+				g.ProcessManager.UpdateView()
+			})
+		}
+
 		return event
 	})
 }
@@ -62,6 +71,36 @@ func (g *Gui) ProcessManagerKeybinds() {
 func (g *Gui) SetKeybinds() {
 	g.FilterInputKeybinds()
 	g.ProcessManagerKeybinds()
+}
+
+func (g *Gui) confirm(message, doneLabel string, panel tview.Primitive, doneFunc func()) {
+	modal := tview.NewModal().
+		SetText(message).
+		AddButtons([]string{doneLabel, "Cancel"}).
+		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
+			g.closeAndSwitchPanel("modal", panel)
+			if buttonLabel == doneLabel {
+				doneFunc()
+			}
+		})
+
+	g.pages.AddAndSwitchToPage("modal", g.Modal(modal, 80, 29), true).ShowPage("main")
+}
+
+func (g *Gui) closeAndSwitchPanel(removePanel string, panel tview.Primitive) {
+	g.pages.RemovePage(removePanel).ShowPage("main")
+	g.SwitchPanel(panel)
+}
+
+func (g *Gui) Modal(p tview.Primitive, width, height int) tview.Primitive {
+	return tview.NewGrid().
+		SetColumns(0, width, 0).
+		SetRows(0, height, 0).
+		AddItem(p, 1, 1, 1, 1, 0, 0, true)
+}
+
+func (g *Gui) SwitchPanel(p tview.Primitive) *tview.Application {
+	return g.App.SetFocus(p)
 }
 
 func (g *Gui) Run() error {
@@ -74,7 +113,12 @@ func (g *Gui) Run() error {
 	grid.AddItem(g.FilterInput, 0, 0, 1, 1, 0, 0, true)
 	grid.AddItem(g.ProcessManager, 1, 0, 2, 2, 0, 0, true)
 
-	if err := g.App.SetRoot(grid, true).SetFocus(g.FilterInput).Run(); err != nil {
+	g.pages = tview.NewPages().
+		AddAndSwitchToPage("main", grid, true)
+
+	g.App.SetRoot(g.pages, true)
+
+	if err := g.SwitchPanel(g.FilterInput).Run(); err != nil {
 		g.App.Stop()
 		log.Println(err)
 		return err
