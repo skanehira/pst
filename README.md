@@ -57,6 +57,7 @@ Default, log file will generate `$HOME/pst.log` if it's not exist.
 | k           | previous process     |
 | g           | first process        |
 | G           | last process         |
+| K           | kill select process  |
 | Enter       | expand child process |
 | Tab         | focus next  panel    |
 | Shift + Tab | focus previous panel |
