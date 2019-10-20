@@ -3,6 +3,7 @@ package gui
 import (
 	"log"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -58,6 +59,10 @@ func (p *ProcessManager) GetProcesses() error {
 	for _, proc := range pids {
 		p.processes = append(p.processes, proc)
 	}
+
+	sort.Slice(p.processes, func(i, j int) bool {
+		return p.processes[i].Pid < p.processes[j].Pid
+	})
 
 	return nil
 }
