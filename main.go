@@ -1,57 +1,41 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
-	ps "github.com/mitchellh/go-ps"
+	"github.com/mitchellh/go-homedir"
+	"github.com/skanehira/pst/gui"
 )
 
-func parseProcesses(processes []ps.Process) map[int]Process {
-	// get ppid list
-	pids := make(map[int]Process)
-	for _, p := range processes {
-		pids[p.Pid()] = Process{
-			Pid:  p.Pid(),
-			PPid: p.PPid(),
-			Cmd:  p.Executable(),
-		}
-	}
-
-	for _, p := range processes {
-		if p.Pid() == p.PPid() {
-			continue
-		}
-
-		if proc, ok := pids[p.PPid()]; ok {
-			proc.Child = append(proc.Child, pids[p.Pid()])
-			pids[p.PPid()] = proc
-		}
-	}
-
-	return pids
-}
-
-func getProcesses() ([]ps.Process, error) {
-	processes, err := ps.Processes()
-	if err != nil {
-		log.Println("cannot get processes: " + err.Error())
-		return nil, err
-	}
-
-	return processes, nil
-}
+var (
+	enableLog = flag.Bool("log", false, "enable output log")
+)
 
 func run() int {
-	// get processes
-	processes, err := getProcesses()
-	if err != nil {
-		return 1
+	flag.Parse()
+
+	if *enableLog {
+		home, err := homedir.Dir()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return 1
+		}
+
+		logWriter, err := os.OpenFile(filepath.Join(home, "pst.log"), os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0666)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return 1
+		}
+
+		log.SetOutput(logWriter)
 	}
 
-	for _, p := range parseProcesses(processes) {
-		fmt.Printf("%#+v\n", p)
+	if err := gui.New().Run(); err != nil {
+		return 1
 	}
 
 	return 0

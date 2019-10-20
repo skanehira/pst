@@ -1,4 +1,4 @@
-package main
+package gui
 
 type Process struct {
 	Pid   int
