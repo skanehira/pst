@@ -54,7 +54,9 @@ func (g *Gui) Confirm(message, doneLabel string, primitive tview.Primitive, done
 		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 			g.CloseAndSwitchPanel("modal", primitive)
 			if buttonLabel == doneLabel {
-				doneFunc()
+				g.App.QueueUpdateDraw(func() {
+					doneFunc()
+				})
 			}
 		})
 
