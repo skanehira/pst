@@ -23,12 +23,15 @@ func New() *Gui {
 
 func (g *Gui) FilterInputKeybinds() {
 	g.FilterInput.SetDoneFunc(func(key tcell.Key) {
-		if key == tcell.KeyEscape {
+		switch key {
+		case tcell.KeyEscape:
 			g.App.Stop()
+		case tcell.KeyEnter:
+			g.App.SetFocus(g.ProcessManager)
 		}
-
 	}).SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		if event.Key() == tcell.KeyTab {
+		switch event.Key() {
+		case tcell.KeyTab:
 			g.App.SetFocus(g.ProcessManager)
 		}
 		return event
@@ -42,11 +45,13 @@ func (g *Gui) FilterInputKeybinds() {
 
 func (g *Gui) ProcessManagerKeybinds() {
 	g.ProcessManager.SetDoneFunc(func(key tcell.Key) {
-		if key == tcell.KeyEscape {
+		switch key {
+		case tcell.KeyEscape:
 			g.App.Stop()
 		}
 	}).SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		if event.Key() == tcell.KeyTab {
+		switch event.Key() {
+		case tcell.KeyTab:
 			g.App.SetFocus(g.FilterInput)
 		}
 
