@@ -43,12 +43,14 @@ func (g *Gui) FilterInputKeybinds() {
 		case tcell.KeyEscape:
 			g.App.Stop()
 		case tcell.KeyEnter:
-			g.App.SetFocus(g.ProcessManager)
+			g.SwitchPanel(g.ProcessManager)
+			g.ProcInfoView.UpdateInfo(g)
 		}
 	}).SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
 		case tcell.KeyTab:
-			g.App.SetFocus(g.ProcessManager)
+			g.SwitchPanel(g.ProcessManager)
+			g.ProcInfoView.UpdateInfo(g)
 		}
 		return event
 	})
