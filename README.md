@@ -1,7 +1,7 @@
 # pst
 This is process manager written in Go.
 
-![](https://i.imgur.com/yzgkbhd.gif)
+![](https://i.imgur.com/TUcGDfk.gif)
 
 ## Installation
 ```sh
