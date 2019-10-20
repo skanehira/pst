@@ -121,6 +121,9 @@ func (p *ProcessManager) Selected() *Process {
 	if row < 0 {
 		return nil
 	}
+	if len(p.processes) < row {
+		return nil
+	}
 	return &p.processes[row-1]
 }
 

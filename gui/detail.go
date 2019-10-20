@@ -26,8 +26,12 @@ func (p *ProcInfoView) UpdateInfo(g *Gui) {
 		text = err.Error()
 	} else {
 		rows := strings.Split(info, "\n")
-		header := fmt.Sprintf("[yellow]%s[white]\n", rows[0])
-		text = header + rows[1]
+		if len(rows) == 1 {
+			text = rows[0]
+		} else {
+			header := fmt.Sprintf("[yellow]%s[white]\n", rows[0])
+			text = header + rows[1]
+		}
 	}
 
 	g.App.QueueUpdateDraw(func() {
