@@ -1,27 +1,36 @@
 package gui
 
 import (
+	"time"
+
 	"github.com/gdamore/tcell"
 	"github.com/rivo/tview"
 )
 
+func (g *Gui) nextPanel() {
+	idx := (g.Panels.Current + 1) % len(g.Panels.Panels)
+	g.Panels.Current = idx
+	g.SwitchPanel(g.Panels.Panels[g.Panels.Current])
+}
+
+func (g *Gui) prePanel() {
+	g.Panels.Current--
+
+	if g.Panels.Current < 0 {
+		g.Current = len(g.Panels.Panels) - 1
+	} else {
+		idx := (g.Panels.Current) % len(g.Panels.Panels)
+		g.Panels.Current = idx
+	}
+	g.SwitchPanel(g.Panels.Panels[g.Panels.Current])
+}
+
 func (g *Gui) GrobalKeybind(event *tcell.EventKey) {
 	switch event.Key() {
 	case tcell.KeyTab:
-		idx := (g.Panels.Current + 1) % len(g.Panels.Panels)
-		g.Panels.Current = idx
-		g.SwitchPanel(g.Panels.Panels[g.Panels.Current])
+		g.nextPanel()
 	case tcell.KeyBacktab:
-		g.Panels.Current--
-
-		if g.Panels.Current < 0 {
-			g.Current = len(g.Panels.Panels) - 1
-		} else {
-			idx := (g.Panels.Current) % len(g.Panels.Panels)
-			g.Panels.Current = idx
-		}
-
-		g.SwitchPanel(g.Panels.Panels[g.Panels.Current])
+		g.prePanel()
 	}
 }
 
@@ -66,9 +75,9 @@ func (g *Gui) FilterInputKeybinds() {
 		case tcell.KeyEscape:
 			g.App.Stop()
 		case tcell.KeyEnter:
-			g.SwitchPanel(g.ProcessManager)
 			g.ProcInfoView.UpdateInfo(g)
 			g.ProcessTreeView.UpdateTree(g)
+			g.nextPanel()
 		}
 	}).SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
