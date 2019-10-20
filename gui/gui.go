@@ -11,7 +11,7 @@ type Gui struct {
 	FilterInput    *tview.InputField
 	ProcessManager *ProcessManager
 	App            *tview.Application
-	pages          *tview.Pages
+	Pages          *tview.Pages
 }
 
 func New() *Gui {
@@ -58,7 +58,7 @@ func (g *Gui) ProcessManagerKeybinds() {
 
 		switch event.Rune() {
 		case 'K':
-			g.confirm("Do you want to kill this process?", "kill", g.ProcessManager, func() {
+			g.Confirm("Do you want to kill this process?", "kill", g.ProcessManager, func() {
 				g.ProcessManager.Kill()
 				g.ProcessManager.UpdateView()
 			})
@@ -73,22 +73,22 @@ func (g *Gui) SetKeybinds() {
 	g.ProcessManagerKeybinds()
 }
 
-func (g *Gui) confirm(message, doneLabel string, panel tview.Primitive, doneFunc func()) {
+func (g *Gui) Confirm(message, doneLabel string, panel tview.Primitive, doneFunc func()) {
 	modal := tview.NewModal().
 		SetText(message).
 		AddButtons([]string{doneLabel, "Cancel"}).
 		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
-			g.closeAndSwitchPanel("modal", panel)
+			g.CloseAndSwitchPanel("modal", panel)
 			if buttonLabel == doneLabel {
 				doneFunc()
 			}
 		})
 
-	g.pages.AddAndSwitchToPage("modal", g.Modal(modal, 80, 29), true).ShowPage("main")
+	g.Pages.AddAndSwitchToPage("modal", g.Modal(modal, 50, 29), true).ShowPage("main")
 }
 
-func (g *Gui) closeAndSwitchPanel(removePanel string, panel tview.Primitive) {
-	g.pages.RemovePage(removePanel).ShowPage("main")
+func (g *Gui) CloseAndSwitchPanel(removePanel string, panel tview.Primitive) {
+	g.Pages.RemovePage(removePanel).ShowPage("main")
 	g.SwitchPanel(panel)
 }
 
@@ -109,16 +109,14 @@ func (g *Gui) Run() error {
 		return err
 	}
 
-	grid := tview.NewGrid().SetRows(1, 0)
-	grid.AddItem(g.FilterInput, 0, 0, 1, 1, 0, 0, true)
-	grid.AddItem(g.ProcessManager, 1, 0, 2, 2, 0, 0, true)
+	grid := tview.NewGrid().SetRows(1).
+		AddItem(g.FilterInput, 0, 0, 1, 1, 0, 0, true).
+		AddItem(g.ProcessManager, 1, 0, 2, 1, 0, 0, true)
 
-	g.pages = tview.NewPages().
+	g.Pages = tview.NewPages().
 		AddAndSwitchToPage("main", grid, true)
 
-	g.App.SetRoot(g.pages, true)
-
-	if err := g.SwitchPanel(g.FilterInput).Run(); err != nil {
+	if err := g.App.SetRoot(g.Pages, true).Run(); err != nil {
 		g.App.Stop()
 		log.Println(err)
 		return err
