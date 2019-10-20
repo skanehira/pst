@@ -17,7 +17,7 @@ type Gui struct {
 
 func New() *Gui {
 	return &Gui{
-		FilterInput:    tview.NewInputField(),
+		FilterInput:    tview.NewInputField().SetLabel("cmd name:"),
 		ProcessManager: NewProcessManager(),
 		App:            tview.NewApplication(),
 		ProcInfoView:   NewProcInfoView(),

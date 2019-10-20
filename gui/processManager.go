@@ -22,9 +22,11 @@ type ProcessManager struct {
 }
 
 func NewProcessManager() *ProcessManager {
-	return &ProcessManager{
+	p := &ProcessManager{
 		Table: tview.NewTable().Select(0, 0).SetFixed(1, 1).SetSelectable(true, false),
 	}
+	p.SetBorder(true).SetTitle("processes").SetTitleAlign(tview.AlignLeft)
+	return p
 }
 
 func (p *ProcessManager) GetProcesses() error {
