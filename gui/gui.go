@@ -8,19 +8,21 @@ import (
 )
 
 type Gui struct {
-	FilterInput    *tview.InputField
-	ProcessManager *ProcessManager
-	ProcInfoView   *ProcInfoView
-	App            *tview.Application
-	Pages          *tview.Pages
+	FilterInput     *tview.InputField
+	ProcessManager  *ProcessManager
+	ProcInfoView    *ProcInfoView
+	ProcessTreeView *ProcessTreeView
+	App             *tview.Application
+	Pages           *tview.Pages
 }
 
 func New() *Gui {
 	return &Gui{
-		FilterInput:    tview.NewInputField().SetLabel("cmd name:"),
-		ProcessManager: NewProcessManager(),
-		App:            tview.NewApplication(),
-		ProcInfoView:   NewProcInfoView(),
+		FilterInput:     tview.NewInputField().SetLabel("cmd name:"),
+		ProcessManager:  NewProcessManager(),
+		App:             tview.NewApplication(),
+		ProcInfoView:    NewProcInfoView(),
+		ProcessTreeView: NewProcessTreeView(),
 	}
 }
 
@@ -80,12 +82,17 @@ func (g *Gui) Run() error {
 	g.ProcessManager.Select(1, 0)
 
 	g.ProcInfoView.UpdateInfo(g)
+	g.ProcessTreeView.UpdateTree(g)
+
+	infoGrid := tview.NewGrid().SetRows(0, 0).
+		AddItem(g.ProcInfoView, 0, 0, 1, 1, 0, 0, true).
+		AddItem(g.ProcessTreeView, 1, 0, 1, 1, 0, 0, true)
 
 	grid := tview.NewGrid().SetRows(1, 0).
 		SetColumns(30, 0).
 		AddItem(g.FilterInput, 0, 0, 1, 1, 0, 0, true).
 		AddItem(g.ProcessManager, 1, 0, 1, 1, 0, 0, true).
-		AddItem(g.ProcInfoView, 1, 1, 1, 1, 0, 0, true)
+		AddItem(infoGrid, 1, 1, 1, 1, 0, 0, true)
 
 	g.Pages = tview.NewPages().
 		AddAndSwitchToPage("main", grid, true)

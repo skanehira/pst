@@ -29,11 +29,11 @@ func NewProcessManager() *ProcessManager {
 	return p
 }
 
-func (p *ProcessManager) GetProcesses() error {
+func (p *ProcessManager) GetProcesses() (map[int]Process, error) {
 	processes, err := ps.Processes()
 	if err != nil {
 		log.Println("cannot get processes: " + err.Error())
-		return err
+		return nil, err
 	}
 
 	pids := make(map[int]Process)
@@ -73,7 +73,7 @@ func (p *ProcessManager) GetProcesses() error {
 		return p.processes[i].Pid < p.processes[j].Pid
 	})
 
-	return nil
+	return pids, nil
 }
 
 var headers = []string{
@@ -84,7 +84,7 @@ var headers = []string{
 
 func (p *ProcessManager) UpdateView() error {
 	// get processes
-	if err := p.GetProcesses(); err != nil {
+	if _, err := p.GetProcesses(); err != nil {
 		return err
 	}
 

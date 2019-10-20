@@ -1,6 +1,8 @@
 package gui
 
-import "github.com/gdamore/tcell"
+import (
+	"github.com/gdamore/tcell"
+)
 
 func (g *Gui) ProcessManagerKeybinds() {
 	g.ProcessManager.SetDoneFunc(func(key tcell.Key) {
@@ -34,6 +36,7 @@ func (g *Gui) ProcessManagerKeybinds() {
 			return
 		}
 		g.ProcInfoView.UpdateInfo(g)
+		g.ProcessTreeView.UpdateTree(g)
 	})
 }
 
@@ -45,12 +48,14 @@ func (g *Gui) FilterInputKeybinds() {
 		case tcell.KeyEnter:
 			g.SwitchPanel(g.ProcessManager)
 			g.ProcInfoView.UpdateInfo(g)
+			g.ProcessTreeView.UpdateTree(g)
 		}
 	}).SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
 		case tcell.KeyTab:
 			g.SwitchPanel(g.ProcessManager)
 			g.ProcInfoView.UpdateInfo(g)
+			g.ProcessTreeView.UpdateTree(g)
 		}
 		return event
 	})
