@@ -42,9 +42,6 @@ func (p *ProcessManager) GetProcesses() (map[int]Process, error) {
 		if proc.Pid() == 0 {
 			continue
 		}
-		if strings.Index(proc.Executable(), p.FilterWord) == -1 {
-			continue
-		}
 		pids[proc.Pid()] = Process{
 			Pid:  proc.Pid(),
 			PPid: proc.PPid(),
@@ -66,6 +63,10 @@ func (p *ProcessManager) GetProcesses() (map[int]Process, error) {
 
 	p.processes = []Process{}
 	for _, proc := range pids {
+		if strings.Index(proc.Cmd, p.FilterWord) == -1 {
+			continue
+		}
+
 		p.processes = append(p.processes, proc)
 	}
 

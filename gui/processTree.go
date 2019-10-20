@@ -44,7 +44,6 @@ func (p *ProcessTreeView) UpdateTree(g *Gui) {
 		}
 		children := node.GetChildren()
 		if len(children) == 0 {
-			// Load and show files in this directory.
 			pid := reference.(int)
 			p.addNode(g, node, pid)
 		} else {
