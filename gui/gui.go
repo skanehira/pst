@@ -25,7 +25,7 @@ type Panels struct {
 func New() *Gui {
 	filterInput := tview.NewInputField().SetLabel("cmd name:")
 	processManager := NewProcessManager()
-	procInfoView := NewProcInfoView()
+	procInfoView := NewProcessInfoView()
 	processTreeView := NewProcessTreeView(processManager)
 
 	g := &Gui{

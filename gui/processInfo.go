@@ -11,7 +11,7 @@ type ProcessInfoView struct {
 	*tview.TextView
 }
 
-func NewProcInfoView() *ProcessInfoView {
+func NewProcessInfoView() *ProcessInfoView {
 	p := &ProcessInfoView{
 		TextView: tview.NewTextView().SetTextAlign(tview.AlignLeft).SetDynamicColors(true),
 	}
