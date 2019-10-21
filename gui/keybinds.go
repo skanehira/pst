@@ -75,15 +75,10 @@ func (g *Gui) FilterInputKeybinds() {
 		case tcell.KeyEscape:
 			g.App.Stop()
 		case tcell.KeyEnter:
-			g.ProcessInfoView.UpdateInfo(g)
-			g.ProcessTreeView.UpdateTree(g)
 			g.nextPanel()
 		}
 	}).SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
-		case tcell.KeyTab:
-			g.ProcessInfoView.UpdateInfo(g)
-			g.ProcessTreeView.UpdateTree(g)
 		}
 		g.GrobalKeybind(event)
 		return event

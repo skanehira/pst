@@ -93,6 +93,9 @@ func (g *Gui) Modal(p tview.Primitive, width, height int) tview.Primitive {
 }
 
 func (g *Gui) SwitchPanel(p tview.Primitive) *tview.Application {
+	g.ProcessInfoView.UpdateInfo(g)
+	g.ProcessTreeView.UpdateTree(g)
+	g.ProcessEnvView.UpdateView(g)
 	return g.App.SetFocus(p)
 }
 
