@@ -1,0 +1,117 @@
+version: 2.1
+
+executors:
+  build:
+    parameters:
+      go-version:
+        type: string
+    docker:
+      - image: circleci/golang:<< parameters.go-version >>
+        environment:
+          GO111MODULE: "on"
+    working_directory: /go/src/github.com/skanehira/pst
+
+commands:
+  go_mod_download:
+    steps:
+      - restore_cache:
+          name: Restore go modules cache
+          keys:
+            - go-modules-{{ checksum "go.sum" }}
+
+      - run: go mod download
+
+      - save_cache:
+          name: Save go modules cache
+          key: go-modules-{{ checksum "go.sum" }}
+          paths:
+            - "/go/pkg/mod"
+
+jobs:
+  build:
+    parameters:
+      go-version:
+        type: string
+
+    executor:
+      name: build
+      go-version: << parameters.go-version >>
+
+    steps:
+      - checkout
+
+      - go_mod_download
+
+  lint:
+    parameters:
+      go-version:
+        type: string
+      golangci-lint-version:
+        type: string
+
+    executor:
+      name: build
+      go-version: << parameters.go-version >>
+
+    steps:
+      - checkout
+
+      - go_mod_download
+
+      - run:
+          name: Install GolangCI-Lint
+          command: curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s v<< parameters.golangci-lint-version >>
+
+      - run:
+          name: Run GolangCI-Lint
+          command: ./bin/golangci-lint run --disable-all --enable=goimports --enable=govet
+
+  release:
+    parameters:
+      go-version:
+        type: string
+
+    executor:
+      name: build
+      go-version: << parameters.go-version >>
+
+    steps:
+      - checkout
+      - go_mod_download
+      - run:
+          name: Run goreleaser
+          command: curl -sL https://git.io/goreleaser | bash -s -- --rm-dist
+
+workflows:
+  stable-build:
+    jobs:
+      - lint:
+          go-version: "1.13.0"
+          golangci-lint-version: "1.17.1"
+      - build:
+          go-version: "1.13.0"
+          requires:
+            - lint
+
+  latest-build:
+    jobs:
+      - lint:
+          go-version: "1.13.0"
+          golangci-lint-version: "1.17.1"
+      - build:
+          go-version: "1.13.0"
+          requires:
+            - lint
+
+  release:
+    jobs:
+      - lint:
+          go-version: "1.13.0"
+          golangci-lint-version: "1.17.1"
+      - release:
+          go-version: "1.13.0"
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /[0-9]+(\.[0-9]+)(\.[0-9]+)/
