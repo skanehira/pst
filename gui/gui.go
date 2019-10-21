@@ -43,6 +43,7 @@ func New() *Gui {
 		Panels: []tview.Primitive{
 			filterInput,
 			processManager,
+			processInfoView,
 			processEnvView,
 			processTreeView,
 		},

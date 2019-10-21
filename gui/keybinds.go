@@ -134,9 +134,17 @@ func (g *Gui) ProcessEnvViewKeybinds() {
 	})
 }
 
+func (g *Gui) ProcessInfoViewKeybinds() {
+	g.ProcessInfoView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		g.GrobalKeybind(event)
+		return event
+	})
+}
+
 func (g *Gui) SetKeybinds() {
 	g.FilterInputKeybinds()
 	g.ProcessManagerKeybinds()
 	g.ProcessTreeViewKeybinds()
+	g.ProcessInfoViewKeybinds()
 	g.ProcessEnvViewKeybinds()
 }
