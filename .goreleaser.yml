@@ -1,0 +1,21 @@
+project_name: docui
+
+builds:
+  - env:
+    - CGO_ENABLED=0
+    - GO111MODULE=on
+
+archives:
+  - replacements:
+      darwin: Darwin
+      linux: Linux
+      amd64: x86_64
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+changelog:
+  skip: true
