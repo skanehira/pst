@@ -1,4 +1,4 @@
-project_name: docui
+project_name: pst
 
 builds:
   - env:
