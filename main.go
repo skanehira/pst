@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -33,6 +34,8 @@ func run() int {
 
 		log.SetOutput(logWriter)
 		log.SetFlags(log.Lshortfile)
+	} else {
+		log.SetOutput(ioutil.Discard)
 	}
 
 	if err := gui.New().Run(); err != nil {
