@@ -7,19 +7,19 @@ import (
 	"github.com/rivo/tview"
 )
 
-type ProcInfoView struct {
+type ProcessInfoView struct {
 	*tview.TextView
 }
 
-func NewProcInfoView() *ProcInfoView {
-	p := &ProcInfoView{
+func NewProcInfoView() *ProcessInfoView {
+	p := &ProcessInfoView{
 		TextView: tview.NewTextView().SetTextAlign(tview.AlignLeft).SetDynamicColors(true),
 	}
 	p.SetTitleAlign(tview.AlignLeft).SetTitle("process info").SetBorder(true)
 	return p
 }
 
-func (p *ProcInfoView) UpdateInfo(g *Gui) {
+func (p *ProcessInfoView) UpdateInfo(g *Gui) {
 	text := ""
 	proc := g.ProcessManager.Selected()
 	if proc != nil {
@@ -42,7 +42,7 @@ func (p *ProcInfoView) UpdateInfo(g *Gui) {
 	})
 }
 
-func (p *ProcInfoView) UpdateInfoWithPid(g *Gui, pid int) {
+func (p *ProcessInfoView) UpdateInfoWithPid(g *Gui, pid int) {
 	text := ""
 	if pid != 0 {
 		info, err := g.ProcessManager.Info(pid)

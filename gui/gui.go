@@ -10,7 +10,7 @@ import (
 type Gui struct {
 	FilterInput     *tview.InputField
 	ProcessManager  *ProcessManager
-	ProcInfoView    *ProcInfoView
+	ProcessInfoView *ProcessInfoView
 	ProcessTreeView *ProcessTreeView
 	App             *tview.Application
 	Pages           *tview.Pages
@@ -32,7 +32,7 @@ func New() *Gui {
 		FilterInput:     filterInput,
 		ProcessManager:  processManager,
 		App:             tview.NewApplication(),
-		ProcInfoView:    procInfoView,
+		ProcessInfoView: procInfoView,
 		ProcessTreeView: processTreeView,
 	}
 
@@ -104,11 +104,11 @@ func (g *Gui) Run() error {
 	// when start app, set select index 0
 	g.ProcessManager.Select(1, 0)
 
-	g.ProcInfoView.UpdateInfo(g)
+	g.ProcessInfoView.UpdateInfo(g)
 	g.ProcessTreeView.UpdateTree(g)
 
 	infoGrid := tview.NewGrid().SetRows(0, 0).
-		AddItem(g.ProcInfoView, 0, 0, 1, 1, 0, 0, true).
+		AddItem(g.ProcessInfoView, 0, 0, 1, 1, 0, 0, true).
 		AddItem(g.ProcessTreeView, 1, 0, 1, 1, 0, 0, true)
 
 	grid := tview.NewGrid().SetRows(1, 0).
