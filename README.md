@@ -6,6 +6,7 @@ This is TUI process monitor written in Go.
 ## Installation
 ```sh
 $ git clone https://github.com/skanehira/pst
+$ cd pst
 $ go install
 ```
 
