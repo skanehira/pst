@@ -12,6 +12,7 @@ type Gui struct {
 	ProcessManager  *ProcessManager
 	ProcessInfoView *ProcessInfoView
 	ProcessTreeView *ProcessTreeView
+	ProcessEnvView  *ProcessEnvView
 	App             *tview.Application
 	Pages           *tview.Pages
 	Panels
@@ -27,6 +28,7 @@ func New() *Gui {
 	processManager := NewProcessManager()
 	procInfoView := NewProcessInfoView()
 	processTreeView := NewProcessTreeView(processManager)
+	processEnvView := NewProcessEnvView()
 
 	g := &Gui{
 		FilterInput:     filterInput,
@@ -34,12 +36,14 @@ func New() *Gui {
 		App:             tview.NewApplication(),
 		ProcessInfoView: procInfoView,
 		ProcessTreeView: processTreeView,
+		ProcessEnvView:  processEnvView,
 	}
 
 	g.Panels = Panels{
 		Panels: []tview.Primitive{
 			filterInput,
 			processManager,
+			processEnvView,
 			processTreeView,
 		},
 	}
@@ -109,10 +113,12 @@ func (g *Gui) Run() error {
 
 	g.ProcessInfoView.UpdateInfo(g)
 	g.ProcessTreeView.UpdateTree(g)
+	g.ProcessEnvView.UpdateView(g)
 
-	infoGrid := tview.NewGrid().SetRows(0, 0).
+	infoGrid := tview.NewGrid().SetRows(0, 0, 0).
 		AddItem(g.ProcessInfoView, 0, 0, 1, 1, 0, 0, true).
-		AddItem(g.ProcessTreeView, 1, 0, 1, 1, 0, 0, true)
+		AddItem(g.ProcessEnvView, 1, 0, 1, 1, 0, 0, true).
+		AddItem(g.ProcessTreeView, 2, 0, 1, 1, 0, 0, true)
 
 	grid := tview.NewGrid().SetRows(1, 0).
 		SetColumns(30, 0).

@@ -2,6 +2,7 @@ package gui
 
 import (
 	"bytes"
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -178,4 +179,47 @@ func (p *ProcessManager) Info(pid int) (string, error) {
 	}
 
 	return buf.String(), nil
+}
+
+func (p *ProcessManager) Env(pid int) (string, error) {
+	// TODO implements windows
+	if runtime.GOOS == "windows" {
+		return "", nil
+	}
+
+	if pid == 0 {
+		return "", nil
+	}
+
+	buf := bytes.Buffer{}
+	cmd := exec.Command("ps", "eww", "-o", "command", "-p", strconv.Itoa(pid))
+	cmd.Stdout = &buf
+	cmd.Stderr = &buf
+
+	if err := cmd.Run(); err != nil {
+		return "", err
+	}
+
+	result := strings.Split(buf.String(), "\n")
+
+	var (
+		envStr []string
+		envs   []string
+	)
+
+	if len(result) > 1 {
+		envStr = strings.Split(result[1], " ")[1:]
+	} else {
+		return buf.String(), nil
+	}
+
+	for _, e := range envStr {
+		kv := strings.Split(e, "=")
+		if len(kv) != 2 {
+			continue
+		}
+		envs = append(envs, fmt.Sprintf("[yellow]%s[white]\t%s", kv[0], kv[1]))
+	}
+
+	return strings.Join(envs, "\n"), nil
 }

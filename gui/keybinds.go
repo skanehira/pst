@@ -66,6 +66,7 @@ func (g *Gui) ProcessManagerKeybinds() {
 		}
 		g.ProcessInfoView.UpdateInfo(g)
 		g.ProcessTreeView.UpdateTree(g)
+		g.ProcessEnvView.UpdateView(g)
 	})
 }
 
@@ -122,6 +123,14 @@ func (g *Gui) ProcessTreeViewKeybinds() {
 
 		pid := ref.(int)
 		g.ProcessInfoView.UpdateInfoWithPid(g, pid)
+		g.ProcessEnvView.UpdateViewWithPid(g, pid)
+	})
+}
+
+func (g *Gui) ProcessEnvViewKeybinds() {
+	g.ProcessEnvView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		g.GrobalKeybind(event)
+		return event
 	})
 }
 
@@ -129,4 +138,5 @@ func (g *Gui) SetKeybinds() {
 	g.FilterInputKeybinds()
 	g.ProcessManagerKeybinds()
 	g.ProcessTreeViewKeybinds()
+	g.ProcessEnvViewKeybinds()
 }
