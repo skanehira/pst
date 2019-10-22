@@ -3,6 +3,10 @@ This is TUI process monitor written in Go.
 
 ![](https://i.imgur.com/TUcGDfk.gif)
 
+## Features
+- Monitor process's list, info, tree
+- Kill process
+
 ## Installation
 ```sh
 $ git clone https://github.com/skanehira/pst
