@@ -1,7 +1,11 @@
 # pst
 This is TUI process monitor written in Go.
 
-![](https://i.imgur.com/TUcGDfk.gif)
+![](https://i.imgur.com/TsrokJ7.gif)
+
+## Features
+- Monitor process's list, info, tree
+- Kill process
 
 ## Features
 - Monitor process's list, info, tree
