@@ -32,6 +32,8 @@ func (g *Gui) GrobalKeybind(event *tcell.EventKey) {
 	case tcell.KeyBacktab:
 		g.prePanel()
 	}
+
+	g.NaviView.UpdateView(g)
 }
 
 func (g *Gui) ProcessManagerKeybinds() {
@@ -41,11 +43,6 @@ func (g *Gui) ProcessManagerKeybinds() {
 			g.App.Stop()
 		}
 	}).SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		switch event.Key() {
-		case tcell.KeyF1:
-			g.Help("process", g.ProcessManager)
-		}
-
 		switch event.Rune() {
 		case 'K':
 			if g.ProcessManager.Selected() != nil {
@@ -79,8 +76,6 @@ func (g *Gui) FilterInputKeybinds() {
 			g.nextPanel()
 		}
 	}).SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		switch event.Key() {
-		}
 		g.GrobalKeybind(event)
 		return event
 	})
@@ -93,8 +88,6 @@ func (g *Gui) FilterInputKeybinds() {
 
 func (g *Gui) ProcessTreeViewKeybinds() {
 	g.ProcessTreeView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		switch event.Key() {
-		}
 		switch event.Rune() {
 		case 'K':
 			if node := g.ProcessTreeView.GetCurrentNode(); node != nil {

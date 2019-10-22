@@ -7,12 +7,21 @@ import (
 	"github.com/rivo/tview"
 )
 
+const (
+	InputPanel int = iota + 1
+	ProcessesPanel
+	ProcessInfoPanel
+	ProcessEnvPanel
+	ProcessTreePanel
+)
+
 type Gui struct {
 	FilterInput     *tview.InputField
 	ProcessManager  *ProcessManager
 	ProcessInfoView *ProcessInfoView
 	ProcessTreeView *ProcessTreeView
 	ProcessEnvView  *ProcessEnvView
+	NaviView        *NaviView
 	App             *tview.Application
 	Pages           *tview.Pages
 	Panels
@@ -21,6 +30,7 @@ type Gui struct {
 type Panels struct {
 	Current int
 	Panels  []tview.Primitive
+	Kinds   []int
 }
 
 func New() *Gui {
@@ -29,6 +39,7 @@ func New() *Gui {
 	processInfoView := NewProcessInfoView()
 	processTreeView := NewProcessTreeView(processManager)
 	processEnvView := NewProcessEnvView()
+	naviView := NewNaviView()
 
 	g := &Gui{
 		FilterInput:     filterInput,
@@ -37,6 +48,7 @@ func New() *Gui {
 		ProcessInfoView: processInfoView,
 		ProcessTreeView: processTreeView,
 		ProcessEnvView:  processEnvView,
+		NaviView:        naviView,
 	}
 
 	g.Panels = Panels{
@@ -46,6 +58,13 @@ func New() *Gui {
 			processInfoView,
 			processEnvView,
 			processTreeView,
+		},
+		Kinds: []int{
+			InputPanel,
+			ProcessesPanel,
+			ProcessInfoPanel,
+			ProcessEnvPanel,
+			ProcessTreePanel,
 		},
 	}
 
@@ -101,7 +120,12 @@ func (g *Gui) SwitchPanel(p tview.Primitive) *tview.Application {
 	g.ProcessInfoView.UpdateInfo(g)
 	g.ProcessTreeView.UpdateTree(g)
 	g.ProcessEnvView.UpdateView(g)
+	g.NaviView.UpdateView(g)
 	return g.App.SetFocus(p)
+}
+
+func (g *Gui) CurrentPanelKind() int {
+	return g.Panels.Kinds[g.Panels.Current]
 }
 
 func (g *Gui) Run() error {
@@ -115,17 +139,20 @@ func (g *Gui) Run() error {
 	g.ProcessInfoView.UpdateInfo(g)
 	g.ProcessTreeView.UpdateTree(g)
 	g.ProcessEnvView.UpdateView(g)
+	g.NaviView.UpdateView(g)
 
 	infoGrid := tview.NewGrid().SetRows(0, 0, 0).
-		AddItem(g.ProcessInfoView, 0, 0, 1, 1, 0, 0, true).
-		AddItem(g.ProcessEnvView, 1, 0, 1, 1, 0, 0, true).
-		AddItem(g.ProcessTreeView, 2, 0, 1, 1, 0, 0, true)
-
-	grid := tview.NewGrid().SetRows(1, 0).
 		SetColumns(30, 0).
+		AddItem(g.ProcessManager, 0, 0, 3, 1, 0, 0, true).
+		AddItem(g.ProcessInfoView, 0, 1, 1, 1, 0, 0, true).
+		AddItem(g.ProcessEnvView, 1, 1, 1, 1, 0, 0, true).
+		AddItem(g.ProcessTreeView, 2, 1, 1, 1, 0, 0, true)
+
+	grid := tview.NewGrid().SetRows(1, 0, 2).
+		SetColumns(30).
 		AddItem(g.FilterInput, 0, 0, 1, 1, 0, 0, true).
-		AddItem(g.ProcessManager, 1, 0, 1, 1, 0, 0, true).
-		AddItem(infoGrid, 1, 1, 1, 1, 0, 0, true)
+		AddItem(infoGrid, 1, 0, 1, 2, 0, 0, true).
+		AddItem(g.NaviView, 2, 0, 1, 2, 0, 0, true)
 
 	g.Pages = tview.NewPages().
 		AddAndSwitchToPage("main", grid, true)
