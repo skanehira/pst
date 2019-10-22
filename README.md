@@ -7,10 +7,6 @@ This is TUI process monitor written in Go.
 - Monitor process's list, info, tree
 - Kill process
 
-## Features
-- Monitor process's list, info, tree
-- Kill process
-
 ## Installation
 ```sh
 $ git clone https://github.com/skanehira/pst
@@ -44,6 +40,8 @@ Default, log file will generate `$HOME/pst.log` if it's not exist.
 | k           | previous entry or line |
 | g           | first entry or line    |
 | G           | last entry or line     |
+| Ctrl + f    | next page              |
+| Ctrl + b    | previous page          |
 | Tab         | focus next panel       |
 | Shift + Tab | focus previous panel   |
 
