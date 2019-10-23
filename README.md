@@ -11,6 +11,10 @@ This is TUI process monitor written in Go.
 - Mac
 - Linux
 
+## Requirements
+- ps
+- lsof
+
 ## Installation
 ```sh
 $ git clone https://github.com/skanehira/pst
@@ -43,7 +47,7 @@ $ pst
 Default, log file will generate `$HOME/pst.log` if it's not exist.
 
 ## Keybindings
-### common keybinds
+### common keybindings
 | key         | description            |
 |-------------|------------------------|
 | Ctrl + c    | stop pst               |
