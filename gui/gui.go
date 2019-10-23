@@ -3,7 +3,6 @@ package gui
 import (
 	"log"
 
-	"github.com/gdamore/tcell"
 	"github.com/rivo/tview"
 )
 
@@ -90,23 +89,6 @@ func (g *Gui) Confirm(message, doneLabel string, primitive tview.Primitive, done
 func (g *Gui) CloseAndSwitchPanel(removePrimitive string, primitive tview.Primitive) {
 	g.Pages.RemovePage(removePrimitive).ShowPage("main")
 	g.SwitchPanel(primitive)
-}
-
-func (g *Gui) TextView(title, text string, page tview.Primitive) {
-	primitiveName := "textView"
-	view := tview.NewTextView()
-	view.SetTitle(title).SetTitleAlign(tview.AlignLeft).SetBorder(true)
-	view.SetText(text)
-	view.SetDynamicColors(true)
-
-	view.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		if event.Key() == tcell.KeyEsc || event.Rune() == 'q' {
-			g.CloseAndSwitchPanel(primitiveName, page)
-		}
-		return event
-	})
-
-	g.Pages.AddAndSwitchToPage(primitiveName, g.Modal(view, 50, 20), true).ShowPage("main")
 }
 
 func (g *Gui) Modal(p tview.Primitive, width, height int) tview.Primitive {
