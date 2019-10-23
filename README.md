@@ -4,7 +4,7 @@ This is TUI process monitor written in Go.
 ![](https://i.imgur.com/TsrokJ7.gif)
 
 ## Features
-- Monitor process's list, info, tree
+- Monitor process's list, info, tree, open files,
 - Kill process
 
 ## Support OS
