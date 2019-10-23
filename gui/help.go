@@ -31,6 +31,8 @@ func (n *NaviView) UpdateView(g *Gui) {
 			n.SetText(fmt.Sprintf("%s, %s, %s", moveNavi, switchNavi, helps[ProcessEnvPanel]))
 		case ProcessTreePanel:
 			n.SetText(fmt.Sprintf("%s, %s, %s", moveNavi, switchNavi, helps[ProcessTreePanel]))
+		case ProcessFilePanel:
+			n.SetText(fmt.Sprintf("%s, %s, %s", moveNavi, switchNavi, helps[ProcessFilePanel]))
 		default:
 			n.SetText("")
 		}
@@ -48,4 +50,5 @@ var helps = map[int]string{
 	ProcessInfoPanel: ``,
 	ProcessEnvPanel:  ``,
 	ProcessTreePanel: `[red]K[white]: kill process`,
+	ProcessFilePanel: ``,
 }

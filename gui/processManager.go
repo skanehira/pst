@@ -226,3 +226,32 @@ func (p *ProcessManager) Env(pid int) (string, error) {
 
 	return strings.Join(envs, "\n"), nil
 }
+
+func (p *ProcessManager) OpenFiles(pid int) (string, error) {
+	// TODO implements windows
+	if runtime.GOOS == "windows" {
+		return "", nil
+	}
+
+	if pid == 0 {
+		return "", nil
+	}
+
+	buf := bytes.Buffer{}
+	cmd := exec.Command("lsof", "-p", strconv.Itoa(pid))
+	cmd.Stdout = &buf
+	cmd.Stderr = &buf
+
+	if err := cmd.Run(); err != nil {
+		return "", errors.New(buf.String())
+	}
+
+	result := strings.SplitN(buf.String(), "\n", 2)
+	if len(result) > 1 {
+		result[0] = fmt.Sprintf("[yellow]%s[white]", result[0])
+	} else {
+		return buf.String(), nil
+	}
+
+	return strings.Join(result, "\n"), nil
+}

@@ -12,6 +12,7 @@ const (
 	ProcessInfoPanel
 	ProcessEnvPanel
 	ProcessTreePanel
+	ProcessFilePanel
 )
 
 type Gui struct {
@@ -20,6 +21,7 @@ type Gui struct {
 	ProcessInfoView *ProcessInfoView
 	ProcessTreeView *ProcessTreeView
 	ProcessEnvView  *ProcessEnvView
+	ProcessFileView *ProcessFileView
 	NaviView        *NaviView
 	App             *tview.Application
 	Pages           *tview.Pages
@@ -38,6 +40,7 @@ func New() *Gui {
 	processInfoView := NewProcessInfoView()
 	processTreeView := NewProcessTreeView(processManager)
 	processEnvView := NewProcessEnvView()
+	processFileView := NewProcessFileView()
 	naviView := NewNaviView()
 
 	g := &Gui{
@@ -47,6 +50,7 @@ func New() *Gui {
 		ProcessInfoView: processInfoView,
 		ProcessTreeView: processTreeView,
 		ProcessEnvView:  processEnvView,
+		ProcessFileView: processFileView,
 		NaviView:        naviView,
 	}
 
@@ -55,6 +59,7 @@ func New() *Gui {
 			filterInput,
 			processManager,
 			processInfoView,
+			processFileView,
 			processEnvView,
 			processTreeView,
 		},
@@ -62,6 +67,7 @@ func New() *Gui {
 			InputPanel,
 			ProcessesPanel,
 			ProcessInfoPanel,
+			ProcessFilePanel,
 			ProcessEnvPanel,
 			ProcessTreePanel,
 		},
@@ -99,11 +105,16 @@ func (g *Gui) Modal(p tview.Primitive, width, height int) tview.Primitive {
 }
 
 func (g *Gui) SwitchPanel(p tview.Primitive) *tview.Application {
+	g.UpdateViews()
+	return g.App.SetFocus(p)
+}
+
+func (g *Gui) UpdateViews() {
 	g.ProcessInfoView.UpdateInfo(g)
 	g.ProcessTreeView.UpdateTree(g)
 	g.ProcessEnvView.UpdateView(g)
+	g.ProcessFileView.UpdateView(g)
 	g.NaviView.UpdateView(g)
-	return g.App.SetFocus(p)
 }
 
 func (g *Gui) CurrentPanelKind() int {
@@ -117,18 +128,15 @@ func (g *Gui) Run() error {
 	}
 	// when start app, set select index 0
 	g.ProcessManager.Select(1, 0)
+	g.UpdateViews()
 
-	g.ProcessInfoView.UpdateInfo(g)
-	g.ProcessTreeView.UpdateTree(g)
-	g.ProcessEnvView.UpdateView(g)
-	g.NaviView.UpdateView(g)
-
-	infoGrid := tview.NewGrid().SetRows(0, 0, 0).
+	infoGrid := tview.NewGrid().SetRows(0, 0, 0, 0).
 		SetColumns(30, 0).
-		AddItem(g.ProcessManager, 0, 0, 3, 1, 0, 0, true).
+		AddItem(g.ProcessManager, 0, 0, 4, 1, 0, 0, true).
 		AddItem(g.ProcessInfoView, 0, 1, 1, 1, 0, 0, true).
-		AddItem(g.ProcessEnvView, 1, 1, 1, 1, 0, 0, true).
-		AddItem(g.ProcessTreeView, 2, 1, 1, 1, 0, 0, true)
+		AddItem(g.ProcessFileView, 1, 1, 1, 1, 0, 0, true).
+		AddItem(g.ProcessEnvView, 2, 1, 1, 1, 0, 0, true).
+		AddItem(g.ProcessTreeView, 3, 1, 1, 1, 0, 0, true)
 
 	grid := tview.NewGrid().SetRows(1, 0, 2).
 		SetColumns(30).
