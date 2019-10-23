@@ -7,6 +7,10 @@ This is TUI process monitor written in Go.
 - Monitor process's list, info, tree
 - Kill process
 
+## Support OS
+- Mac
+- Linux
+
 ## Installation
 ```sh
 $ git clone https://github.com/skanehira/pst
@@ -14,9 +18,16 @@ $ cd pst
 $ go install
 ```
 
-## Support OS
-- Mac
-- Linux
+## Options
+You can change the process info to be displayed with environment `PS_ARGS`.
+
+Default `PS_ARGS` value is `pid,ppid,%cpu,%mem,lstart,user,command`.
+
+e.g make alias and use it.
+
+```sh
+alias pst="env PS_ARGS=%cpu,%mem,lstart pst"
+```
 
 ## Usage
 ```sh

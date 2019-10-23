@@ -2,6 +2,7 @@ package gui
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -15,6 +16,8 @@ import (
 	ps "github.com/mitchellh/go-ps"
 	"github.com/rivo/tview"
 )
+
+var psArgs = GetEnv("PS_ARGS", "pid,ppid,%cpu,%mem,lstart,user,command")
 
 type ProcessManager struct {
 	*tview.Table
@@ -171,7 +174,7 @@ func (p *ProcessManager) Info(pid int) (string, error) {
 	}
 
 	buf := bytes.Buffer{}
-	cmd := exec.Command("ps", "-o", "pid,ppid,%cpu,%mem,lstart,user,command", "-p", strconv.Itoa(pid))
+	cmd := exec.Command("ps", "-o", psArgs, "-p", strconv.Itoa(pid))
 	cmd.Stdout = &buf
 	cmd.Stderr = &buf
 	if err := cmd.Run(); err != nil {
