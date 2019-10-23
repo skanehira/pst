@@ -175,7 +175,7 @@ func (p *ProcessManager) Info(pid int) (string, error) {
 	cmd.Stdout = &buf
 	cmd.Stderr = &buf
 	if err := cmd.Run(); err != nil {
-		return "", err
+		return "", errors.New(buf.String())
 	}
 
 	return buf.String(), nil
