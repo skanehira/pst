@@ -22,7 +22,7 @@ func (n *NaviView) UpdateView(g *Gui) {
 	g.App.QueueUpdateDraw(func() {
 		switch g.CurrentPanelKind() {
 		case InputPanel:
-			n.SetText(fmt.Sprintf("%s, %s", moveNavi, switchNavi))
+			n.SetText(fmt.Sprintf("%s", switchNavi))
 		case ProcessesPanel:
 			n.SetText(fmt.Sprintf("%s, %s, %s", moveNavi, switchNavi, helps[ProcessesPanel]))
 		case ProcessInfoPanel:
@@ -40,7 +40,7 @@ func (n *NaviView) UpdateView(g *Gui) {
 }
 
 var (
-	moveNavi   = "[red::b]j[white]: move down, [red]k[white]: move up, [red]g[white]: move to top, [red]G[white]: move to bottom, [red]Ctrl-f[white]: next page [red]Ctrl-b[white]: previous page, [red]Ctrl-c[white]: stop pst"
+	moveNavi   = "[red::b]j[white]: move down, [red]k[white]: move up, [red]h[white]: move left, [red]l[white]: move right, [red]g[white]: move to top, [red]G[white]: move to bottom, [red]Ctrl-f[white]: next page [red]Ctrl-b[white]: previous page, [red]Ctrl-c[white]: stop pst"
 	switchNavi = `[red::b]Tab[white]: next panel, [red]Shift-Tab[white]: previous panel`
 )
 

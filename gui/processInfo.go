@@ -16,6 +16,7 @@ func NewProcessInfoView() *ProcessInfoView {
 		TextView: tview.NewTextView().SetTextAlign(tview.AlignLeft).SetDynamicColors(true),
 	}
 	p.SetTitleAlign(tview.AlignLeft).SetTitle("process info").SetBorder(true)
+	p.SetWrap(false)
 	return p
 }
 

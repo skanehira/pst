@@ -48,17 +48,19 @@ Default, log file will generate `$HOME/pst.log` if it's not exist.
 
 ## Keybindings
 ### common keybindings
-| key         | description            |
-|-------------|------------------------|
-| Ctrl + c    | stop pst               |
-| j           | next entry or line     |
-| k           | previous entry or line |
-| g           | first entry or line    |
-| G           | last entry or line     |
-| Ctrl + f    | next page              |
-| Ctrl + b    | previous page          |
-| Tab         | focus next panel       |
-| Shift + Tab | focus previous panel   |
+| key         | description          |
+|-------------|----------------------|
+| Ctrl + c    | stop pst             |
+| j           | move down            |
+| k           | move up              |
+| h           | move left            |
+| l           | move right           |
+| g           | move to top          |
+| G           | move to bottom       |
+| Ctrl + f    | next page            |
+| Ctrl + b    | previous page        |
+| Tab         | focus next panel     |
+| Shift + Tab | focus previous panel |
 
 ### input
 | key         | description          |

@@ -14,6 +14,7 @@ func NewProcessEnvView() *ProcessEnvView {
 	}
 
 	p.SetTitleAlign(tview.AlignLeft).SetTitle("process environments").SetBorder(true)
+	p.SetWrap(false)
 	return p
 }
 
