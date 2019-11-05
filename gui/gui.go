@@ -34,9 +34,11 @@ type Panels struct {
 	Kinds   []int
 }
 
-func New() *Gui {
+func New(word string) *Gui {
 	filterInput := tview.NewInputField().SetLabel("cmd name:")
+	filterInput.SetText(word)
 	processManager := NewProcessManager()
+	processManager.FilterWord = word
 	processInfoView := NewProcessInfoView()
 	processTreeView := NewProcessTreeView(processManager)
 	processEnvView := NewProcessEnvView()

@@ -13,7 +13,8 @@ import (
 )
 
 var (
-	enableLog = flag.Bool("log", false, "enable output log")
+	enableLog  = flag.Bool("log", false, "enable output log")
+	filterWord = flag.String("proc", "", "use word to filtering process name when starting")
 )
 
 func run() int {
@@ -38,7 +39,7 @@ func run() int {
 		log.SetOutput(ioutil.Discard)
 	}
 
-	if err := gui.New().Run(); err != nil {
+	if err := gui.New(*filterWord).Run(); err != nil {
 		return 1
 	}
 
