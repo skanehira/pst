@@ -39,6 +39,8 @@ $ pst -h
 Usage of pst:
   -log
         enable output log
+  -proc string
+        use word to filtering process name when starting
 
 # run tui
 $ pst
