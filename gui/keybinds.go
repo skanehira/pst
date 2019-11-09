@@ -88,19 +88,26 @@ func (g *Gui) FilterInputKeybinds() {
 }
 
 func (g *Gui) ProcessTreeViewKeybinds() {
+	g.ProcessTreeView.SetSelectedFunc(func(node *tview.TreeNode) {
+		g.ProcessTreeView.ExpandToggle(g.ProcessManager, node, !node.IsExpanded())
+	})
+
 	g.ProcessTreeView.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		node := g.ProcessTreeView.GetCurrentNode()
 		switch event.Rune() {
 		case 'K':
-			if node := g.ProcessTreeView.GetCurrentNode(); node != nil {
-				if ref := node.GetReference(); ref != nil {
-					g.Confirm("Do you want to kill this process?", "kill", g.ProcessTreeView, func() {
-						g.ProcessManager.KillWithPid(ref.(int))
-						// wait a little to finish process killing
-						time.Sleep(1 * time.Millisecond)
-						g.ProcessTreeView.UpdateTree(g)
-					})
-				}
+			if ref := node.GetReference(); ref != nil {
+				g.Confirm("Do you want to kill this process?", "kill", g.ProcessTreeView, func() {
+					g.ProcessManager.KillWithPid(ref.(int))
+					// wait a little to finish process killing
+					time.Sleep(1 * time.Millisecond)
+					g.ProcessTreeView.UpdateTree(g)
+				})
 			}
+		case 'l':
+			g.ProcessTreeView.ExpandToggle(g.ProcessManager, node, true)
+		case 'h':
+			g.ProcessTreeView.ExpandToggle(g.ProcessManager, node, false)
 		}
 		g.GrobalKeybind(event)
 		return event

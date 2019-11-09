@@ -49,6 +49,6 @@ var helps = map[int]string{
 	ProcessesPanel:   `[red]K[white]: kill process`,
 	ProcessInfoPanel: ``,
 	ProcessEnvPanel:  ``,
-	ProcessTreePanel: `[red]K[white]: kill process`,
+	ProcessTreePanel: `[red]K[white]: kill process, [red]h[white]: collapse, [red]l[white]: expand, [red]enter[white]: expand toggle`,
 	ProcessFilePanel: ``,
 }

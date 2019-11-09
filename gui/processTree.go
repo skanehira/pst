@@ -18,22 +18,22 @@ func NewProcessTreeView(pm *ProcessManager) *ProcessTreeView {
 	}
 
 	p.SetBorder(true).SetTitle("process tree").SetTitleAlign(tview.AlignLeft)
-
-	p.SetSelectedFunc(func(node *tview.TreeNode) {
-		reference := node.GetReference()
-		if reference == nil {
-			return // Selecting the root node does nothing.
-		}
-		children := node.GetChildren()
-		if len(children) == 0 {
-			pid := reference.(int)
-			p.addNode(pm, node, pid)
-		} else {
-			// Collapse if visible, expand if collapsed.
-			node.SetExpanded(!node.IsExpanded())
-		}
-	})
 	return p
+}
+
+func (p *ProcessTreeView) ExpandToggle(pm *ProcessManager, node *tview.TreeNode, isExpand bool) {
+	reference := node.GetReference()
+	if reference == nil {
+		return // Selecting the root node does nothing.
+	}
+	children := node.GetChildren()
+	if len(children) == 0 {
+		pid := reference.(int)
+		p.addNode(pm, node, pid)
+	} else {
+		// Collapse if visible, expand if collapsed.
+		node.SetExpanded(isExpand)
+	}
 }
 
 func (p *ProcessTreeView) UpdateTree(g *Gui) {
