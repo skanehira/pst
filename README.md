@@ -1,4 +1,5 @@
 # pst
+# This repository no longer develop.
 This is TUI process monitor written in Go.
 
 ![](https://i.imgur.com/TsrokJ7.gif)
